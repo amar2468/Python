@@ -1,4 +1,5 @@
-# This is a game where the user guesses the number and if they guess correctly, they get a prize and if they guess incorrectly, they can guess again
+# This is a game where the user guesses the number and if they get 10 wins, they receive a prize, relative to the level they played.
+# The user creates their own account which they use in this game
 # The guessing number game has three levels: Easy, Medium and Hard. The user can pick whatever one
 # The amount of wins and losses will be remembered.
 import random
@@ -40,7 +41,7 @@ def play_game(correct_number,guess,won,lost):
             print("You have to enter a number!!! Try again: ")
         else:
             if user_number == correct_number:
-                print("Correct!!! You won a prize!!")
+                print("Correct!!!")
                 won += 1
                 guess = 0
                 i = 1
@@ -70,9 +71,9 @@ j = 0
 
 while j == 0:
     j = create_user_account()
+    game_difficulty = input("What game difficulty do you want to pick: Easy, Medium or Hard. Type the word in: ")
 while j == 1:
     while True:
-        game_difficulty = input("What game difficulty do you want to pick: Easy, Medium or Hard. Type the word in: ")
 
         if game_difficulty.startswith('e') or game_difficulty.startswith('E'):
             correct_number = random.randint(1,10)
@@ -81,8 +82,13 @@ while j == 1:
             correct_guesses,i = play_game(correct_number,guess,no_of_wins,no_of_loss)
             if i == 1:
                 no_of_wins = correct_guesses
-                print("Wins -> ",no_of_wins)
-                print("Loss -> ",no_of_loss)
+                if no_of_wins == 10:
+                    print("YOU WON A SPECIAL PRIZE: Samsung Galaxy A41")
+                    print("Wins -> ",no_of_wins)
+                    print("Loss -> ",no_of_loss)
+                else:
+                    print("Wins -> ",no_of_wins)
+                    print("Loss -> ",no_of_loss)
             elif i == 0:
                 no_of_loss = correct_guesses
                 print("Wins -> ",no_of_wins)
@@ -94,8 +100,13 @@ while j == 1:
             correct_guesses,i = play_game(correct_number,guess,no_of_wins,no_of_loss)
             if i == 1:
                 no_of_wins = correct_guesses
-                print("Wins -> ",no_of_wins)
-                print("Loss -> ",no_of_loss)
+                if no_of_wins == 10:
+                    print("YOU WON A SPECIAL PRIZE: Huawei P30 Pro")
+                    print("Wins -> ",no_of_wins)
+                    print("Loss -> ",no_of_loss)
+                else:
+                    print("Wins -> ",no_of_wins)
+                    print("Loss -> ",no_of_loss)
             elif i == 0:
                 no_of_loss = correct_guesses
                 print("Wins -> ",no_of_wins)
@@ -107,8 +118,13 @@ while j == 1:
             correct_guesses,i = play_game(correct_number,guess,no_of_wins,no_of_loss)
             if i == 1:
                 no_of_wins = correct_guesses
-                print("Wins -> ",no_of_wins)
-                print("Loss -> ",no_of_loss)
+                if no_of_wins == 10:
+                    print("YOU WON A SPECIAL PRIZE: iPhone 12 Pro Max")
+                    print("Wins -> ",no_of_wins)
+                    print("Loss -> ",no_of_loss)
+                else:
+                    print("Wins -> ",no_of_wins)
+                    print("Loss -> ",no_of_loss)
             elif i == 0:
                 no_of_loss = correct_guesses
                 print("Wins -> ",no_of_wins)
