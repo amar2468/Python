@@ -21,7 +21,7 @@ def divide_into_documents(my_file): # This function takes the file as the parame
                 pass 
             else: # in the case that there are elements in the string i.e. it is filled with elements
                 for i in current_document: # for each element in the string
-                    if i in string.punctuation: # if that element is a member of string.punctuation
+                    if i in string.punctuation and i != '.': # if that element is a member of string.punctuation
                         current_document = current_document.replace(i, '') # replace it with ''
                 list1.append(current_document) # this adds the string to the list
                 current_document = '' # once you add the string to the list, you empty the string so that you can continue on
@@ -30,7 +30,7 @@ def divide_into_documents(my_file): # This function takes the file as the parame
     # With this, I simply append the string to the list when the document is finished.
 
     for i in current_document: # this is similar to the one above in the else statement. The reason why we have one here is because the last document needs to be added to the list and we are already outside the loop because there is no more token
-        if i in string.punctuation: # if i is a member of string.punctuation
+        if i in string.punctuation and i != '.': # if i is a member of string.punctuation
             current_document = current_document.replace(i, '') # replace it with ''
     list1.append(current_document) # append the string to the list
 
@@ -68,7 +68,7 @@ def add_to_dictionary(list1): # Function that passes the list and this function 
 
     
 
-my_file = open('ap_docs2.txt','r') # open the file and put it inside the variable
+my_file = open('ap_docs.txt','r') # open the file and put it inside the variable
 
 list1 = [] # empty list declared
 
@@ -136,9 +136,13 @@ while user_input != 1 and user_input != 2 and user_input != 3: # while the user 
                 print("The document number is not an integer\n") # print message that says that document number is not an integer
                 user_input = 0 # return back to main menu
             else: # if the try succeeds
-                print(list1[document_number - 1]) # print the list index that the user told them
-                user_input = 0 # return to main menu
-    
+                try:
+                    print(list1[document_number - 1]) # print the list index that the user told them
+                except IndexError:
+                    print("That document number does not exist: ")
+                    user_input = 0
+                else:
+                    user_input = 0 # return to main menu
         elif user_input == 3: # if the menu option was 3
             print("Thanks for using document retrieval: ") # thank the user and end the program
 
