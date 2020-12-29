@@ -8,30 +8,31 @@ import string
 
 def divide_into_documents(my_file): # This function takes the file as the parameter and divides the documents in the file into the list
 
-    string1 = '' # I started off with an empty string so that I can concatenate each line into it from the document until the token
+    current_document = '' # I started off with an empty string so that I can concatenate each line into it from the document until the token
     list1 = [] # empty list that will hold all the documents
-    string2 = '<N' # string2 has been set to that value so that when I approach the token, I can skip to the next line
+    new_token = '<NEW DOCUMENT>' # string2 has been set to that value so that when I approach the token, I can skip to the next line
 
     for i in my_file: # iterates over the file using i
-        if string2 not in i: # if i is inside the document 
-            i = i.lower() # set i to lowercase
-            string1 = string1 + ''.join(i.rstrip("\n")) + ' ' # concatenate the string and join the value i into the string. Also, I got rid of the \n using rstrip
-            continue
-
+        if new_token not in i:  
+            current_document = current_document + i 
+            pass
         else: # if we encounter the token
-            if string1 == '': # if the string is empty 
-                continue 
+            if current_document == '': # if the string is empty 
+                pass 
             else: # in the case that there are elements in the string i.e. it is filled with elements
-                for i in string1: # for each element in the string
+                for i in current_document: # for each element in the string
                     if i in string.punctuation: # if that element is a member of string.punctuation
-                        string1 = string1.replace(i, '') # replace it with ''
-                list1.append(string1) # this adds the string to the list
-                string1 = '' # once you add the string to the list, you empty the string so that you can continue on
-            continue
-    for i in string1: # this is similar to the one above in the else statement. The reason why we have one here is because the last document needs to be added to the list and we are already outside the loop because there is no more token
+                        current_document = current_document.replace(i, '') # replace it with ''
+                list1.append(current_document) # this adds the string to the list
+                current_document = '' # once you add the string to the list, you empty the string so that you can continue on
+            pass
+    # This last for loop is there because after the last <NEW DOCUMENT>, there is no more <NEW DOCUMENT> and it is not added to the list
+    # With this, I simply append the string to the list when the document is finished.
+
+    for i in current_document: # this is similar to the one above in the else statement. The reason why we have one here is because the last document needs to be added to the list and we are already outside the loop because there is no more token
         if i in string.punctuation: # if i is a member of string.punctuation
-            string1 = string1.replace(i, '') # replace it with ''
-    list1.append(string1) # append the string to the list
+            current_document = current_document.replace(i, '') # replace it with ''
+    list1.append(current_document) # append the string to the list
 
     return list1 # return the list
 
@@ -44,19 +45,19 @@ def add_to_dictionary(list1): # Function that passes the list and this function 
     counter = 0 # counter is set to 0
 
     i = 0 # i is set to 0
-    word = list1[i].split() # i splitted the first document in the list so that i can add each word into the dictionary
-    for word in list1: # iterates over the words in the list
+    splitted_into_words = list1[i].split() # i splitted the first document in the list so that i can add each word into the dictionary
+    for splitted_into_words in list1: # iterates over the words in the list
         if i < len(list1): # will run until the end of the list
-            word = list1[i].split() # splits the next element in the list
+            splitted_into_words = list1[i].split() # splits the next element in the list
         else:
-            StopIteration
-        while counter < len(word): # this will run until counter is not less than the length of the element
-            if word[j] in dictionary1: # if the word is in the dictionary
-                dictionary1[word[j]] = dictionary1[word[j]] + [i + 1] # add the current document number to the the value of the key
+            pass
+        while counter < len(splitted_into_words): # this will run until counter is not less than the length of the element
+            if splitted_into_words[j] in dictionary1: # if the word is in the dictionary
+                dictionary1[splitted_into_words[j].lower()] = dictionary1[splitted_into_words[j]] + [i + 1] # add the current document number to the the value of the key
                 j += 1 
                 counter += 1
             else:
-                dictionary1[word[j]] = [i + 1] # add the document number to the word that is the key
+                dictionary1[splitted_into_words[j].lower()] = [i + 1] # add the document number to the word that is the key
                 j += 1
                 counter += 1
         else: # when finished iterating over the element
@@ -67,7 +68,7 @@ def add_to_dictionary(list1): # Function that passes the list and this function 
 
     
 
-my_file = open('ap_docs.txt','r') # open the file and put it inside the variable
+my_file = open('ap_docs2.txt','r') # open the file and put it inside the variable
 
 list1 = [] # empty list declared
 
@@ -83,12 +84,16 @@ def find_word_in_document(dictionary1,one_search_word,second_search_word): # fun
     inter_set = set() # this will hold the intersection of the two sets
 
     for k in dictionary1.keys(): # iterates over each key in the dictionary
-        if k.lower() == one_search_word.lower(): # if the key in the dictionary is equal to the word entered by the user
-            a_set = set(dictionary1[k.lower()]) # put the document number in the set
-            print(k,'->',a_set) # print it to screen
+        if k == one_search_word.lower(): # if the key in the dictionary is equal to the word entered by the user
+            if one_search_word == k:
+                a_set = set(dictionary1[k]) # put the document number in the set
+                print(k,'->',a_set) # print it to screen
+            elif one_search_word != k:
+                a_set = set(dictionary1[k])
+                print(k,'->',a_set) # print it to screen
         
-        elif k.lower() == second_search_word.lower(): # if the key in the dictionary is equal to the second word entered by the user
-            b_set = set(dictionary1[k.lower()]) # put document number in the set
+        elif k == second_search_word.lower(): # if the key in the dictionary is equal to the second word entered by the user
+            b_set = set(dictionary1[k]) # put document number in the set
             print(k,'->',b_set) # print to screen
         else:
             continue
@@ -138,4 +143,3 @@ while user_input != 1 and user_input != 2 and user_input != 3: # while the user 
             print("Thanks for using document retrieval: ") # thank the user and end the program
 
 my_file.close() # close the file
-
