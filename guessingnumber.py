@@ -84,7 +84,6 @@ while j == 0:
 
         if game_difficulty.startswith('e') or game_difficulty.startswith('E'):
             correct_number = random.randint(1,10)
-            print(correct_number)
             guess = 3
             correct_guesses,i,no_of_rounds = play_game(correct_number,guess,no_of_wins,no_of_loss,no_of_rounds)
             if i == 1:
@@ -107,7 +106,6 @@ while j == 0:
                 print("Loss -> ",no_of_loss)
         elif game_difficulty.startswith('m') or game_difficulty.startswith('M'):
             correct_number = random.randint(1,30)
-            print(correct_number)
             guess = 3
             correct_guesses,i,no_of_rounds = play_game(correct_number,guess,no_of_wins,no_of_loss,no_of_rounds)
             if i == 1:
@@ -130,7 +128,6 @@ while j == 0:
                 print("Loss -> ",no_of_loss)
         elif game_difficulty.startswith('h') or game_difficulty.startswith('H'):
             correct_number = random.randint(1,100)
-            print(correct_number)
             guess = 3
             correct_guesses,i,no_of_rounds = play_game(correct_number,guess,no_of_wins,no_of_loss,no_of_rounds)
             if i == 1:
