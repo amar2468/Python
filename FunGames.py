@@ -1,3 +1,4 @@
+# Author -> Amar Plakalo
 # There are two available games to be played: Guessing number game and Rock, Paper, Scissors.
 # *****************GUESSING GAME*****************
 # This is a game where the user guesses the number
