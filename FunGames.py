@@ -101,7 +101,7 @@ class RockPaperScissors(Games):
         self.draws = draws
         self.number_of_the_round = number_of_the_round
     def play_rock_paper_scissors(self):
-        computers_choice = "Rock"
+        computers_choice = random.choice(["Rock","Paper","Scissors"])
         self.computers_choice = computers_choice
         if self.computers_choice == "Rock" and self.option_of_user == "Rock":
             print("No one wins!!")
@@ -248,16 +248,20 @@ def menu():
             no_of_draws = 0
             no_of_rounds = 0
             while j == 1:
-                user_option = input("Pick either rock, paper or scissors: ")
-
-                if user_option.startswith("R") or user_option.startswith("r"):
-                    user_option = "Rock"
-                elif user_option.startswith("P") or user_option.startswith("p"):
-                    user_option = "Paper"
-                elif user_option.startswith("S") or user_option.startswith("s"):
-                    user_option = "Scissors"
+                try:
+                    user_option = input("Pick either rock, paper or scissors: ")
+                except TypeError:
+                    print("You must choose either rock (r), paper (p) or scissors (s): ")
                 else:
-                    print("You didn't pick rock, paper or scissors. Choose again: ")
+                    if user_option.startswith("R") or user_option.startswith("r"):
+                        user_option = "Rock"
+                    elif user_option.startswith("P") or user_option.startswith("p"):
+                        user_option = "Paper"
+                    elif user_option.startswith("S") or user_option.startswith("s"):
+                        user_option = "Scissors"
+                    else:
+                        print("Wrong option selected. Try again")
+                    
                 correct_attempts,i,no_of_rounds = RockPaperScissors(no_of_wins,no_of_loss,no_of_draws,no_of_rounds,user_option).play_rock_paper_scissors()
             
                 if i == 2:
@@ -297,6 +301,8 @@ def menu():
                     print("Wins -> ",no_of_wins)
                     print("Loss -> ",no_of_loss)
                     print("Draws -> ",no_of_draws)
-
+        else:
+            print("You didn't select either game. You have to select either the guessing game (g) or the rock paper scissors game (r): ")
+            j = 0
 
 menu()
