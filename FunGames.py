@@ -248,19 +248,21 @@ def menu():
             no_of_draws = 0
             no_of_rounds = 0
             while j == 1:
-                try:
+                l = 1
+                while l == 1:
                     user_option = input("Pick either rock, paper or scissors: ")
-                except TypeError:
-                    print("You must choose either rock (r), paper (p) or scissors (s): ")
-                else:
                     if user_option.startswith("R") or user_option.startswith("r"):
                         user_option = "Rock"
+                        l = 0
                     elif user_option.startswith("P") or user_option.startswith("p"):
                         user_option = "Paper"
+                        l = 0
                     elif user_option.startswith("S") or user_option.startswith("s"):
                         user_option = "Scissors"
+                        l = 0
                     else:
                         print("Wrong option selected. Try again")
+                        l = 1
                     
                 correct_attempts,i,no_of_rounds = RockPaperScissors(no_of_wins,no_of_loss,no_of_draws,no_of_rounds,user_option).play_rock_paper_scissors()
             
