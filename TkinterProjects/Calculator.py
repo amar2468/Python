@@ -1,4 +1,5 @@
-from tkinter import *
+from tkinter import Entry, Tk, Button
+from tkinter.constants import END
 
 root = Tk() # this is used so that the window is displayed
 
