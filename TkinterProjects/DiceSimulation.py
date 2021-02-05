@@ -9,7 +9,9 @@ from PIL import Image,ImageTk
 import random
 
 root = Tk()
+root.iconbitmap("C:/Users/amar-/Downloads/picturedice.ico")
 root.title("My Dice Rolling Program")
+
 
 heading_in_the_game = tkinter.Label(root,text=" Welcome to this game. Have fun!!",bg="orange",font=15)
 heading_in_the_game.grid(row=0,column=0,columnspan = 5)
@@ -33,7 +35,7 @@ my_label = Label(image=my_img1)
 
 my_label.grid(row = 1, column = 1, columnspan = 3)
 
-click_button = Button(root, text="Roll the dice", command=button_clicked)
+click_button = Button(root, text="Roll the dice", bg="yellow", command=button_clicked)
 
 click_button.grid(row = 2, column = 2)
 
