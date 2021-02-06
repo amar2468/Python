@@ -35,7 +35,7 @@ my_label = Label(image=my_img1)
 
 my_label.grid(row = 1, column = 1, columnspan = 3)
 
-click_button = Button(root, text="Roll the dice", bg="yellow", command=button_clicked)
+click_button = Button(root, text="Roll the dice",padx=12,pady=15, bg="yellow",	activebackground ="blue" ,command=button_clicked)
 
 click_button.grid(row = 2, column = 2)
 
