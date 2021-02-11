@@ -1,6 +1,6 @@
 # **********************************Contact Book***************************************
 # Author: Amar Plakalo
-# Date: 07 Feb 2021
+# Date: 11 Feb 2021
 # This contact book allows user to add their contacts. They first have to create their account so that the contacts are private to them
 # and so no one else can see. This will allow multiple users to create accounts on this app and they can save and update their contacts
 # whenever they want
@@ -106,18 +106,27 @@ def log_off_system(check_log_on):
         print("You cannot log off because you have not logged on. First log on before you want to log off: ")
         check_log_on = 0
         return check_log_on
-def add_contact():
-    name_of_person = input("Enter the name of the person you wish to add to your contact book: ")
-    address_of_person = input("Enter the address of the person you wish to add: ")
-    phone_number_of_person = input("Enter the phone number of the person: ")
-    email_of_person = input("Enter the email of the person: ")
-    cursorForContactBook.execute("INSERT INTO contact_book_users VALUES (?,?,?,?)",(name_of_person,address_of_person,phone_number_of_person,email_of_person))
-def remove_contact():
-    user_id = input("Enter the id of the user you wish to delete: ")
-    cursorForContactBook.execute("DELETE FROM contact_book_users WHERE rowid = (?)",user_id)
-def view_contact():
-    cursorForContactBook.execute("SELECT rowid,* FROM contact_book_users")
-    print(cursorForContactBook.fetchall())
+def add_contact(check_log_on):
+    if check_log_on == 1:
+        name_of_person = input("Enter the name of the person you wish to add to your contact book: ")
+        address_of_person = input("Enter the address of the person you wish to add: ")
+        phone_number_of_person = input("Enter the phone number of the person: ")
+        email_of_person = input("Enter the email of the person: ")
+        cursorForContactBook.execute("INSERT INTO contact_book_users VALUES (?,?,?,?)",(name_of_person,address_of_person,phone_number_of_person,email_of_person))
+    elif check_log_on == 0:
+        print("You first have to login in order to add a contact: ")
+def remove_contact(check_log_on):
+    if check_log_on == 1:
+        user_id = input("Enter the id of the user you wish to delete: ")
+        cursorForContactBook.execute("DELETE FROM contact_book_users WHERE rowid = (?)",user_id)
+    elif check_log_on == 0:
+        print("You are not logged on - so you cannot check remove the contact: ")
+def view_contact(check_log_on):
+    if check_log_on == 1:
+        cursorForContactBook.execute("SELECT rowid,* FROM contact_book_users")
+        print(cursorForContactBook.fetchall())
+    elif check_log_on == 0:
+        print("You cannot view the contacts because you are not logged on: ")
 
 
 menu_choice = 0
@@ -148,13 +157,13 @@ while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice
             check_log_on = log_on_system(check_log_on,user_name,user_password,list1)
             menu_choice = 0
         elif menu_choice == 3:
-            add_contact()
+            add_contact(check_log_on)
             menu_choice = 0
         elif menu_choice == 4:
-            remove_contact()
+            remove_contact(check_log_on)
             menu_choice = 0
         elif menu_choice == 5:
-            view_contact()
+            view_contact(check_log_on)
             menu_choice = 0
         elif menu_choice == 6:
             check_log_on = log_off_system(check_log_on)
