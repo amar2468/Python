@@ -19,7 +19,7 @@
 # If the user wins, they will receive a prize.
 import random
 
-class Games(object):
+class Registration(object):
     def __init__(self,name,email,password):
         # Initialising variables so that they can be used in the create_user_account() method
         self.name = name
@@ -171,7 +171,7 @@ def menu():
         f_name = ''
         email_addr = ''
         pWord = ''
-        j = Games(f_name,email_addr,pWord).create_user_account() # calls the Games class and the method inside it
+        j = Registration(f_name,email_addr,pWord).create_user_account() # calls the Games class and the method inside it
         choice_of_game = input("Which game do you wish to play? GuessingNumberGame or RockPaperScissors?: ")
         if choice_of_game.startswith('g') or choice_of_game.startswith('G'):
             # if the user chose g or G, this game will be played.
