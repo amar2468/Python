@@ -52,7 +52,7 @@ class Games(object):
             j = 0 # j is set to 0 so that the user has to create the account again
             return j # j is returned
     
-class GuessingNumberGame(Games):
+class GuessingNumberGame():
     def __init__(self,correct_number,guess,won,lost,rounds):
         # initialising variables to be used in method play_game()
         self.correct_number = correct_number
@@ -97,7 +97,7 @@ class GuessingNumberGame(Games):
                         return self.lost,i,self.rounds # return values
                     else: # if there is more than 0 guesses left
                         print("Go lower!!!")
-class RockPaperScissors(Games):
+class RockPaperScissors():
     def __init__(self,winnings,losses,draws,number_of_the_round,option_of_user):
         # initialise variables so that it can be used for play_rock_paper_scissors() method
         self.option_of_user = option_of_user
