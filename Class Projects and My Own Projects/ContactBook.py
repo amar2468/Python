@@ -1,12 +1,12 @@
 # **********************************Contact Book***************************************
 # Author: Amar Plakalo
-# Date: 11 Feb 2021
+# Date: 14 Feb 2021
 # This contact book allows user to add their contacts. They first have to create their account so that the contacts are private to them
 # and so no one else can see. This will allow multiple users to create accounts on this app and they can save and update their contacts
 # whenever they want
 import random
 import sqlite3
-
+import json
 
 connection_with_contact_book = sqlite3.connect('Contact_Book.db')
 
@@ -29,44 +29,56 @@ def registration_system(list1,dict1):
 
     if returned_value == 1:
         print("Thanks for registering " + user_name + ". Now, log on: ")
-        list1.append(user_name)
+        dict1.clear()
         dict1[user_name] = user_password
+        list1.append(user_name)
+
+        save_users_data = open("contactbookdetails.txt","a")
+        json.dump(dict1,save_users_data)
+        save_users_data.write("\n")
+        save_users_data.close()
+
         print(dict1) 
         print(list1)
         return user_name,user_phone_number,user_password
+
     elif returned_value == 0:
         print("Failed to register. Try again: ")
         registration_system(list1,dict1)
 
 
 # 2. Log on system
-def log_on_system(proof_of_log_on,user_name,user_password,list1):
-    if proof_of_log_on == 0:
+def log_on_system(check_log_on,list1):
+
+    if check_log_on == 0:
         print("Hello! Welcome back. Enter your username and password to log on: ")
 
         input_user_name = input("Enter username: ")
         input_passwd = input("Enter password: ")
+        save_users_data = open("contactbookdetails.txt","r")
+        for i in save_users_data:
+            password_and_username = json.loads(i)
 
-        if user_name in list1:
-            if dict1[input_user_name] == input_passwd:
-                print("Welcome back to your account. Enjoy yourself!!!")
-                proof_of_log_on = 1
-                return proof_of_log_on
-            else:
-                print("Incorrectly entered username OR password OR both. Try again: ")
-                proof_of_log_on = 0
-                return proof_of_log_on
+            if input_user_name in password_and_username.keys():
+                if password_and_username[input_user_name] == input_passwd:
+                    print("Welcome back to your account. Enjoy yourself!!!")
+                    check_log_on = 1
+                    return check_log_on
+                else:
+                    print("Incorrectly entered username OR password OR both. Try again: ")
+                    check_log_on = 0
+                    return check_log_on
         else:
-            print("The username you specified has not been created. Therefore, you cannot log on until you create an account: ")
-            proof_of_log_on = 0
-            return proof_of_log_on
-    elif proof_of_log_on == 1:
-        print("You are already logged in. You first have to log off in order to login. ")
+            print("User account that you entered does not exist on our system. Try again: ")
+            check_log_on = 0
+            return check_log_on
+                
+    elif check_log_on == 1:
+        print("You already logged in: ")
         proof_of_log_on = 1
         return proof_of_log_on
 
-
-# 3. Verify that this is you
+# 3. Verify that this is you (Part of the registration process - in order to create your account to use the contact book)
 def verification_process(passwd_user):
     code_received = random.randint(10000,99999) # random 5 digit number for the access code
     print("Your access code is " + str(code_received) + ".Enter this number and then enter your password to gain access: ")
@@ -90,22 +102,6 @@ def verification_process(passwd_user):
         number_to_return = 0
         return number_to_return
 
-# 4. Log off System
-def log_off_system(check_log_on):
-    if check_log_on == 1:
-        user_log_off = input("Do you wish to log off? Y or N: ")
-        if user_log_off.startswith("Y") or user_log_off.startswith("y"):
-            print("See you next time!!!")
-            check_log_on = 0
-            return check_log_on   
-        elif user_log_off.startswith("N") or user_log_off.startswith("n"):
-            print("Ok. Carry on using the app with your account!!!")
-            check_log_on = 1
-            return check_log_on
-    elif check_log_on == 0:
-        print("You cannot log off because you have not logged on. First log on before you want to log off: ")
-        check_log_on = 0
-        return check_log_on
 def add_contact(check_log_on):
     if check_log_on == 1:
         name_of_person = input("Enter the name of the person you wish to add to your contact book: ")
@@ -124,9 +120,28 @@ def remove_contact(check_log_on):
 def view_contact(check_log_on):
     if check_log_on == 1:
         cursorForContactBook.execute("SELECT rowid,* FROM contact_book_users")
-        print(cursorForContactBook.fetchall())
+        contacts_saved_by_user = cursorForContactBook.fetchall()
+
+        for each_contact in contacts_saved_by_user:
+            print(each_contact)
+
     elif check_log_on == 0:
         print("You cannot view the contacts because you are not logged on: ")
+def log_off_system(check_log_on):
+    if check_log_on == 1:
+        user_log_off = input("Do you wish to log off? Y or N: ")
+        if user_log_off.startswith("Y") or user_log_off.startswith("y"):
+            print("See you next time!!!")
+            check_log_on = 0
+            return check_log_on   
+        elif user_log_off.startswith("N") or user_log_off.startswith("n"):
+            print("Ok. Carry on using the app with your account!!!")
+            check_log_on = 1
+            return check_log_on
+    elif check_log_on == 0:
+        print("You cannot log off because you have not logged on. First log on before you want to log off: ")
+        check_log_on = 0
+        return check_log_on
 
 
 menu_choice = 0
@@ -154,7 +169,7 @@ while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice
                 print("You cannot create an account because you are already logged in. Log off and then you can create an account: ")
                 menu_choice = 0
         elif menu_choice == 2:
-            check_log_on = log_on_system(check_log_on,user_name,user_password,list1)
+            check_log_on = log_on_system(check_log_on,list1)
             menu_choice = 0
         elif menu_choice == 3:
             add_contact(check_log_on)
