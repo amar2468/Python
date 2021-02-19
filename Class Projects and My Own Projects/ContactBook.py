@@ -13,7 +13,7 @@ import os
 # Create a registration,login,verification and log off systems
 
 # 1. Registration
-def registration_system(list1,dict1):
+def registration_system(dict1):
     user_name = input("Enter your name so that you can register to use the Contact Book app: ")
     user_phone_number = input("Enter your phone number: ")
     user_password = input("Enter your password: ")
@@ -40,7 +40,6 @@ def registration_system(list1,dict1):
         print("Thanks for registering " + user_name + ". Now, log on: ")
         dict1.clear()
         dict1[user_name] = user_password
-        list1.append(user_name)
 
         save_users_data = open("contactbookdetails.txt","a")
         json.dump(dict1,save_users_data)
@@ -48,16 +47,15 @@ def registration_system(list1,dict1):
         save_users_data.close()
 
         print(dict1) 
-        print(list1)
         return user_name,user_phone_number,user_password
 
     elif returned_value == 0:
         print("Failed to register. Try again: ")
-        registration_system(list1,dict1)
+        registration_system(dict1)
 
 
 # 2. Log on system
-def log_on_system(check_log_on,list1):
+def log_on_system(check_log_on):
 
     if check_log_on == 0:
         print("Hello! Welcome back. Enter your username and password to log on: ")
@@ -141,27 +139,35 @@ def add_contact(check_log_on,user_name):
     elif check_log_on == 0:
         print("You first have to login in order to add a contact: ")
 def remove_contact(check_log_on):
-    connection_with_user_database = sqlite3.connect('%s.db'% user_name)
-    cursorForUserBook = connection_with_user_database.cursor()
-    if check_log_on == 1:
-        user_id = input("Enter the id of the user you wish to delete: ")
-        cursorForUserBook.execute("DELETE FROM contact_book_users WHERE rowid = (?)",user_id)
-        connection_with_user_database.commit()
-        connection_with_user_database.close()
-    elif check_log_on == 0:
-        print("You are not logged on - so you cannot check remove the contact: ")
+    try:
+        connection_with_user_database = sqlite3.connect('%s.db'% user_name)
+    except NameError:
+        print("The username does not exist or you have not logged in: ")
+    else:
+        cursorForUserBook = connection_with_user_database.cursor()
+        if check_log_on == 1:
+            user_id = input("Enter the id of the user you wish to delete: ")
+            cursorForUserBook.execute("DELETE FROM contact_book_users WHERE rowid = (?)",user_id)
+            connection_with_user_database.commit()
+            connection_with_user_database.close()
+        elif check_log_on == 0:
+            print("You are not logged on - so you cannot check remove the contact: ")
 def view_contact(check_log_on):
-    connection_with_user_database = sqlite3.connect('%s.db'% user_name)
-    cursorForUserBook = connection_with_user_database.cursor()
-    if check_log_on == 1:
-        cursorForUserBook.execute("SELECT rowid,* FROM contact_book_users")
-        contacts_saved_by_user = cursorForUserBook.fetchall()
+    try:
+        connection_with_user_database = sqlite3.connect('%s.db'% user_name)
+    except NameError:
+        print("You haven't logged on or the account doesn't exist: ")
+    else:
+        cursorForUserBook = connection_with_user_database.cursor()
+        if check_log_on == 1:
+            cursorForUserBook.execute("SELECT rowid,* FROM contact_book_users")
+            contacts_saved_by_user = cursorForUserBook.fetchall()
 
-        for each_contact in contacts_saved_by_user:
-            print(each_contact)
+            for each_contact in contacts_saved_by_user:
+                print(each_contact)
 
-    elif check_log_on == 0:
-        print("You cannot view the contacts because you are not logged on: ")
+        elif check_log_on == 0:
+            print("You cannot view the contacts because you are not logged on: ")
 def log_off_system(check_log_on):
     if check_log_on == 1:
         user_log_off = input("Do you wish to log off? Y or N: ")
@@ -181,7 +187,6 @@ def log_off_system(check_log_on):
 
 menu_choice = 0
 check_log_on = 0
-list1 = []
 dict1 = {}
 while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice != 4 and menu_choice != 5 and menu_choice != 6:
     print("Welcome. Pick an option from the menu: ")
@@ -198,17 +203,22 @@ while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice
     else:
         if menu_choice == 1:
             if check_log_on == 0:
-                user_name,user_phone_number,user_password = registration_system(list1,dict1)
+                user_name,user_phone_number,user_password = registration_system(dict1)
                 menu_choice = 0 
             elif check_log_on == 1:
                 print("You cannot create an account because you are already logged in. Log off and then you can create an account: ")
                 menu_choice = 0
         elif menu_choice == 2:
-            check_log_on,user_name = log_on_system(check_log_on,list1)
+            check_log_on,user_name = log_on_system(check_log_on)
             menu_choice = 0
         elif menu_choice == 3:
-            add_contact(check_log_on,user_name)
-            menu_choice = 0
+            try:
+                add_contact(check_log_on,user_name)
+            except NameError:
+                print("You haven't logged or your account has not been created: ")
+                menu_choice = 0
+            else:
+                menu_choice = 0
         elif menu_choice == 4:
             remove_contact(check_log_on)
             menu_choice = 0
