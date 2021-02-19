@@ -1,31 +1,40 @@
 # **********************************Contact Book***************************************
 # Author: Amar Plakalo
-# Date: 14 Feb 2021
+# Date: 19 Feb 2021
 # This contact book allows user to add their contacts. They first have to create their account so that the contacts are private to them
 # and so no one else can see. This will allow multiple users to create accounts on this app and they can save and update their contacts
 # whenever they want
 import random
 import sqlite3
 import json
-
-connection_with_contact_book = sqlite3.connect('Contact_Book.db')
-
-cursorForContactBook = connection_with_contact_book.cursor()
+import os
 
 
-connection_with_contact_book.commit()
 # Create a registration,login,verification and log off systems
 
 # 1. Registration
 def registration_system(list1,dict1):
     user_name = input("Enter your name so that you can register to use the Contact Book app: ")
-    if user_name in list1:
-        print("Username already exists. Try another one: ")
-        registration_system(list1,dict1)
-    elif user_name not in list1:
-        user_phone_number = input("Enter your phone number: ")
-        user_password = input("Enter your password: ")
-    returned_value = verification_process(user_password)
+    user_phone_number = input("Enter your phone number: ")
+    user_password = input("Enter your password: ")
+    save_users_data = open("contactbookdetails.txt","r")
+    for i in save_users_data:
+        print("->",i)
+        password_and_username = json.loads(i)
+
+        if user_name in password_and_username.keys():
+            if user_password in password_and_username.values():
+                print("Username and password already exist: ")
+                returned_value = 0
+                return user_name,user_phone_number,user_password
+            else:
+                print("Username already exists")
+                returned_value = 0
+                return user_name,user_phone_number,user_password
+            
+    else:
+        verification_process(user_password)
+        returned_value = 1
 
     if returned_value == 1:
         print("Thanks for registering " + user_name + ". Now, log on: ")
@@ -62,8 +71,9 @@ def log_on_system(check_log_on,list1):
             if input_user_name in password_and_username.keys():
                 if password_and_username[input_user_name] == input_passwd:
                     print("Welcome back to your account. Enjoy yourself!!!")
+                    user_name = input_user_name
                     check_log_on = 1
-                    return check_log_on
+                    return check_log_on,user_name
                 else:
                     print("Incorrectly entered username OR password OR both. Try again: ")
                     check_log_on = 0
@@ -102,25 +112,50 @@ def verification_process(passwd_user):
         number_to_return = 0
         return number_to_return
 
-def add_contact(check_log_on):
+def add_contact(check_log_on,user_name):
     if check_log_on == 1:
         name_of_person = input("Enter the name of the person you wish to add to your contact book: ")
         address_of_person = input("Enter the address of the person you wish to add: ")
         phone_number_of_person = input("Enter the phone number of the person: ")
         email_of_person = input("Enter the email of the person: ")
-        cursorForContactBook.execute("INSERT INTO contact_book_users VALUES (?,?,?,?)",(name_of_person,address_of_person,phone_number_of_person,email_of_person))
+        #user_file = open("%s.db" % user_name,"a")
+        connection_with_user_database = sqlite3.connect('%s.db'% user_name)
+        cursorForUserBook = connection_with_user_database.cursor()
+        filesize = os.path.getsize("%s.db"% user_name)
+        if filesize == 0:
+            cursorForUserBook.execute("""CREATE TABLE contact_book_users(
+                                    Name text,
+                                    Address text,
+                                    Phone Number integer,
+                                    Email text
+            )""")
+
+            cursorForUserBook.execute("INSERT INTO contact_book_users VALUES (?,?,?,?)",(name_of_person,address_of_person,phone_number_of_person,email_of_person))
+
+            connection_with_user_database.commit()
+            connection_with_user_database.close()
+        else:
+            cursorForUserBook.execute("INSERT INTO contact_book_users VALUES (?,?,?,?)",(name_of_person,address_of_person,phone_number_of_person,email_of_person))
+            connection_with_user_database.commit()
+            connection_with_user_database.close()
     elif check_log_on == 0:
         print("You first have to login in order to add a contact: ")
 def remove_contact(check_log_on):
+    connection_with_user_database = sqlite3.connect('%s.db'% user_name)
+    cursorForUserBook = connection_with_user_database.cursor()
     if check_log_on == 1:
         user_id = input("Enter the id of the user you wish to delete: ")
-        cursorForContactBook.execute("DELETE FROM contact_book_users WHERE rowid = (?)",user_id)
+        cursorForUserBook.execute("DELETE FROM contact_book_users WHERE rowid = (?)",user_id)
+        connection_with_user_database.commit()
+        connection_with_user_database.close()
     elif check_log_on == 0:
         print("You are not logged on - so you cannot check remove the contact: ")
 def view_contact(check_log_on):
+    connection_with_user_database = sqlite3.connect('%s.db'% user_name)
+    cursorForUserBook = connection_with_user_database.cursor()
     if check_log_on == 1:
-        cursorForContactBook.execute("SELECT rowid,* FROM contact_book_users")
-        contacts_saved_by_user = cursorForContactBook.fetchall()
+        cursorForUserBook.execute("SELECT rowid,* FROM contact_book_users")
+        contacts_saved_by_user = cursorForUserBook.fetchall()
 
         for each_contact in contacts_saved_by_user:
             print(each_contact)
@@ -169,10 +204,10 @@ while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice
                 print("You cannot create an account because you are already logged in. Log off and then you can create an account: ")
                 menu_choice = 0
         elif menu_choice == 2:
-            check_log_on = log_on_system(check_log_on,list1)
+            check_log_on,user_name = log_on_system(check_log_on,list1)
             menu_choice = 0
         elif menu_choice == 3:
-            add_contact(check_log_on)
+            add_contact(check_log_on,user_name)
             menu_choice = 0
         elif menu_choice == 4:
             remove_contact(check_log_on)
