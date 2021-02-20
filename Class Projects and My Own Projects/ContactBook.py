@@ -1,6 +1,6 @@
 # **********************************Contact Book***************************************
 # Author: Amar Plakalo
-# Date: 19 Feb 2021
+# Date: 20 Feb 2021
 # This contact book allows user to add their contacts. They first have to create their account so that the contacts are private to them
 # and so no one else can see. This will allow multiple users to create accounts on this app and they can save and update their contacts
 # whenever they want
@@ -8,7 +8,7 @@ import random
 import sqlite3
 import json
 import os
-
+import re
 
 # Create a registration,login,verification and log off systems
 
@@ -18,8 +18,8 @@ def registration_system(dict1):
     user_phone_number = input("Enter your phone number: ")
     user_password = input("Enter your password: ")
     save_users_data = open("contactbookdetails.txt","r")
+        
     for i in save_users_data:
-        print("->",i)
         password_and_username = json.loads(i)
 
         if user_name in password_and_username.keys():
@@ -46,7 +46,7 @@ def registration_system(dict1):
         save_users_data.write("\n")
         save_users_data.close()
 
-        print(dict1) 
+
         return user_name,user_phone_number,user_password
 
     elif returned_value == 0:
@@ -116,26 +116,31 @@ def add_contact(check_log_on,user_name):
         address_of_person = input("Enter the address of the person you wish to add: ")
         phone_number_of_person = input("Enter the phone number of the person: ")
         email_of_person = input("Enter the email of the person: ")
-        #user_file = open("%s.db" % user_name,"a")
-        connection_with_user_database = sqlite3.connect('%s.db'% user_name)
-        cursorForUserBook = connection_with_user_database.cursor()
-        filesize = os.path.getsize("%s.db"% user_name)
-        if filesize == 0:
-            cursorForUserBook.execute("""CREATE TABLE contact_book_users(
-                                    Name text,
-                                    Address text,
-                                    Phone Number integer,
-                                    Email text
-            )""")
+        regex = '^[a-z0-9]+[\\._]?[a-z0-9]+[@]\\w+[.]\\w{2,3}$'
+        if (re.search(regex,email_of_person)):
+            
+            connection_with_user_database = sqlite3.connect('%s.db'% user_name)
+            cursorForUserBook = connection_with_user_database.cursor()
+            filesize = os.path.getsize("%s.db"% user_name)
+            str(phone_number_of_person)
+            if filesize == 0:
+                cursorForUserBook.execute("""CREATE TABLE contact_book_users(
+                                        Name TEXT,
+                                        Address TEXT,
+                                        Phone TEXT,
+                                        Email TEXT
+                )""")
 
-            cursorForUserBook.execute("INSERT INTO contact_book_users VALUES (?,?,?,?)",(name_of_person,address_of_person,phone_number_of_person,email_of_person))
+                cursorForUserBook.execute("INSERT INTO contact_book_users VALUES (?,?,?,?)",(name_of_person,address_of_person,phone_number_of_person,email_of_person))
 
-            connection_with_user_database.commit()
-            connection_with_user_database.close()
+                connection_with_user_database.commit()
+                connection_with_user_database.close()
+            else:
+                cursorForUserBook.execute("INSERT INTO contact_book_users VALUES (?,?,?,?)",(name_of_person,address_of_person,phone_number_of_person,email_of_person))
+                connection_with_user_database.commit()
+                connection_with_user_database.close()
         else:
-            cursorForUserBook.execute("INSERT INTO contact_book_users VALUES (?,?,?,?)",(name_of_person,address_of_person,phone_number_of_person,email_of_person))
-            connection_with_user_database.commit()
-            connection_with_user_database.close()
+            print("Invalid email entered: ")
     elif check_log_on == 0:
         print("You first have to login in order to add a contact: ")
 def remove_contact(check_log_on):
@@ -147,7 +152,8 @@ def remove_contact(check_log_on):
         cursorForUserBook = connection_with_user_database.cursor()
         if check_log_on == 1:
             user_id = input("Enter the id of the user you wish to delete: ")
-            cursorForUserBook.execute("DELETE FROM contact_book_users WHERE rowid = (?)",user_id)
+
+            cursorForUserBook.execute("DELETE FROM contact_book_users WHERE rowid = (?)",(user_id,))
             connection_with_user_database.commit()
             connection_with_user_database.close()
         elif check_log_on == 0:
