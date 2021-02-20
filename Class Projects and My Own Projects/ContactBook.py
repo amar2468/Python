@@ -132,7 +132,6 @@ def add_contact(check_log_on,user_name):
                 )""")
 
                 cursorForUserBook.execute("INSERT INTO contact_book_users VALUES (?,?,?,?)",(name_of_person,address_of_person,phone_number_of_person,email_of_person))
-
                 connection_with_user_database.commit()
                 connection_with_user_database.close()
             else:
@@ -166,11 +165,20 @@ def view_contact(check_log_on):
     else:
         cursorForUserBook = connection_with_user_database.cursor()
         if check_log_on == 1:
-            cursorForUserBook.execute("SELECT rowid,* FROM contact_book_users")
-            contacts_saved_by_user = cursorForUserBook.fetchall()
+            filesize = os.path.getsize("%s.db"% user_name)
+            if filesize == 0:
+                print("You cannot view the contacts because your database of information has not been created"
+                      "\nPlease add contacts in order for the account to function: ")
+            else:
+                cursorForUserBook.execute("SELECT rowid,* FROM contact_book_users")
+                contacts_saved_by_user = cursorForUserBook.fetchall()
+                number_of_contacts = 0
+                while number_of_contacts < len(contacts_saved_by_user):
+                    number_of_contacts += 1
+                print(number_of_contacts)
 
-            for each_contact in contacts_saved_by_user:
-                print(each_contact)
+                for each_contact in contacts_saved_by_user:
+                    print(each_contact)
 
         elif check_log_on == 0:
             print("You cannot view the contacts because you are not logged on: ")
@@ -193,6 +201,7 @@ def log_off_system(check_log_on):
 
 menu_choice = 0
 check_log_on = 0
+number_of_contacts = 0
 dict1 = {}
 while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice != 4 and menu_choice != 5 and menu_choice != 6:
     print("Welcome. Pick an option from the menu: ")
