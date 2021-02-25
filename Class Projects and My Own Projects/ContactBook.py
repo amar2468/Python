@@ -1,6 +1,6 @@
 # **********************************Contact Book***************************************
 # Author: Amar Plakalo
-# Date: 25 Feb 2021
+# Date: 20 Feb 2021
 # This contact book allows user to add their contacts. They first have to create their account so that the contacts are private to them
 # and so no one else can see. This will allow multiple users to create accounts on this app and they can add and remove contacts as they
 # wish. They can also view their contacts and have access to information they need such as the phone number of the person. 
@@ -198,12 +198,28 @@ def update_contact(check_log_on):
         person_id = input("Which contact ID do you wish to update?")
         update_choice = input("If you want to change the name, choose n or N. If you want to change the address, choose"
                              "a or A. If you wish to change the phone, choose p or P. If email, choose e or E: ")
-        if update_choice.startswith("n") or ("N"):
+        if update_choice.startswith("n") or update_choice.startswith("N"):
             new_name = input("Enter the new name: ")
             cursorForUserBook.execute("Update contact_book_users SET Name = (?) WHERE rowid = (?)",(new_name,person_id))
             connection_with_user_database.commit()
+            connection_with_user_database.close()
+        elif update_choice.startswith("a") or update_choice.startswith("A"):
+            new_address = input("Enter the new address: ")
+            cursorForUserBook.execute("Update contact_book_users SET Address = (?) WHERE rowid = (?)",(new_address,person_id))
+            connection_with_user_database.commit()
+            connection_with_user_database.close()
+        elif update_choice.startswith("p") or update_choice.startswith("P"):
+            new_phone_number = input("Enter the new phone number: ")
+            cursorForUserBook.execute("Update contact_book_users SET Phone Number = (?) WHERE rowid = (?)",(new_phone_number,person_id))
+            connection_with_user_database.commit()
+            connection_with_user_database.close()
+        elif update_choice.startswith("e") or update_choice.startswith("E"):
+            new_email = input("Enter the new email: ")
+            cursorForUserBook.execute("Update contact_book_users SET Email = (?) WHERE rowid = (?)",(new_email,person_id))
+            connection_with_user_database.commit()
+            connection_with_user_database.close()
     elif check_log_on == 0:
-        pass
+        print("You have to login in order to update the contacts. Please do so! ")
 def view_contact(check_log_on):
     """
     This function allows the user to view the contact list and to see the total amount of contacts they have.
