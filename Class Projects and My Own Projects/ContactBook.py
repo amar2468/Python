@@ -1,6 +1,6 @@
 # **********************************Contact Book***************************************
 # Author: Amar Plakalo
-# Date: 20 Feb 2021
+# Date: 25 Feb 2021
 # This contact book allows user to add their contacts. They first have to create their account so that the contacts are private to them
 # and so no one else can see. This will allow multiple users to create accounts on this app and they can add and remove contacts as they
 # wish. They can also view their contacts and have access to information they need such as the phone number of the person. 
