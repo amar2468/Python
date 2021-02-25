@@ -191,6 +191,19 @@ def remove_contact(check_log_on):
             connection_with_user_database.close() # close the database
         elif check_log_on == 0: # if not logged in
             print("You are not logged on - so you cannot check remove the contact: ") # error message
+def update_contact(check_log_on):
+    if check_log_on == 1:
+        connection_with_user_database = sqlite3.connect('%s.db'% user_name)
+        cursorForUserBook = connection_with_user_database.cursor()
+        person_id = input("Which contact ID do you wish to update?")
+        update_choice = input("If you want to change the name, choose n or N. If you want to change the address, choose"
+                             "a or A. If you wish to change the phone, choose p or P. If email, choose e or E: ")
+        if update_choice.startswith("n") or ("N"):
+            new_name = input("Enter the new name: ")
+            cursorForUserBook.execute("Update contact_book_users SET Name = (?) WHERE rowid = (?)",(new_name,person_id))
+            connection_with_user_database.commit()
+    elif check_log_on == 0:
+        pass
 def view_contact(check_log_on):
     """
     This function allows the user to view the contact list and to see the total amount of contacts they have.
@@ -247,14 +260,15 @@ menu_choice = 0 # the menu choice the user chooses
 check_log_on = 0 # whether the user has logged on (1) or logged off (0)
 number_of_contacts = 0 # counts the number of contacts the user has
 dict1 = {} # stores the username and password
-while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice != 4 and menu_choice != 5 and menu_choice != 6:
+while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice != 4 and menu_choice != 5 and menu_choice != 6 and menu_choice != 7:
     print("Welcome. Pick an option from the menu: ")
     print("1.Register an account: ")
     print("2.Log into your account: ")
     print("3.Add a contact: ")
     print("4.Remove a contact: ")
-    print("5.View a contact: ")
-    print("6.Log off: ")
+    print("5.Update a contact: ")
+    print("6.View a contact: ")
+    print("7.Log off: ")
     try: # allow user to enter a menu choice
         menu_choice = int(input("Enter your choice: "))
     except ValueError: # expect an error (user does not enter number from 1-6)
@@ -282,10 +296,13 @@ while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice
         elif menu_choice == 4: # if user chose option 4
             remove_contact(check_log_on) # call the function to remove the contact
             menu_choice = 0 # back to menu
-        elif menu_choice == 5: # if user chose option 5
+        elif menu_choice == 5: # if user wants to update contacts
+            update_contact(check_log_on) # calls the function to update the contact
+            menu_choice = 0 # back to the main menu
+        elif menu_choice == 6: # if user chose option 6
             view_contact(check_log_on) # call the function that allows user to view the contact
             menu_choice = 0 # back to menu
-        elif menu_choice == 6: # if the user chose option 6
+        elif menu_choice == 7: # if the user chose option 7
             check_log_on = log_off_system(check_log_on) # call the log off function which will return the variable on the left of the
                                                         # equals sign
             menu_choice = 0 # back to menu
