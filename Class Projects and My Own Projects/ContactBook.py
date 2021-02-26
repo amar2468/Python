@@ -1,6 +1,6 @@
 # **********************************Contact Book***************************************
 # Author: Amar Plakalo
-# Date: 20 Feb 2021
+# Date: 26 Feb 2021
 # This contact book allows user to add their contacts. They first have to create their account so that the contacts are private to them
 # and so no one else can see. This will allow multiple users to create accounts on this app and they can add and remove contacts as they
 # wish. They can also view their contacts and have access to information they need such as the phone number of the person. 
@@ -194,30 +194,34 @@ def remove_contact(check_log_on):
 def update_contact(check_log_on):
     if check_log_on == 1:
         connection_with_user_database = sqlite3.connect('%s.db'% user_name)
-        cursorForUserBook = connection_with_user_database.cursor()
-        person_id = input("Which contact ID do you wish to update?")
-        update_choice = input("If you want to change the name, choose n or N. If you want to change the address, choose"
-                             "a or A. If you wish to change the phone, choose p or P. If email, choose e or E: ")
-        if update_choice.startswith("n") or update_choice.startswith("N"):
-            new_name = input("Enter the new name: ")
-            cursorForUserBook.execute("Update contact_book_users SET Name = (?) WHERE rowid = (?)",(new_name,person_id))
-            connection_with_user_database.commit()
-            connection_with_user_database.close()
-        elif update_choice.startswith("a") or update_choice.startswith("A"):
-            new_address = input("Enter the new address: ")
-            cursorForUserBook.execute("Update contact_book_users SET Address = (?) WHERE rowid = (?)",(new_address,person_id))
-            connection_with_user_database.commit()
-            connection_with_user_database.close()
-        elif update_choice.startswith("p") or update_choice.startswith("P"):
-            new_phone_number = input("Enter the new phone number: ")
-            cursorForUserBook.execute("Update contact_book_users SET Phone Number = (?) WHERE rowid = (?)",(new_phone_number,person_id))
-            connection_with_user_database.commit()
-            connection_with_user_database.close()
-        elif update_choice.startswith("e") or update_choice.startswith("E"):
-            new_email = input("Enter the new email: ")
-            cursorForUserBook.execute("Update contact_book_users SET Email = (?) WHERE rowid = (?)",(new_email,person_id))
-            connection_with_user_database.commit()
-            connection_with_user_database.close()
+        filesize = os.path.getsize("%s.db"% user_name) # measures the size of the file
+        if filesize == 0:
+            print("You cannot update the contacts - you have not added any previously. You must do that first: ")
+        else:
+            cursorForUserBook = connection_with_user_database.cursor()
+            person_id = input("Which contact ID do you wish to update?")
+            update_choice = input("If you want to change the name, choose n or N. If you want to change the address, choose"
+                                "a or A. If you wish to change the phone, choose p or P. If email, choose e or E: ")
+            if update_choice.startswith("n") or update_choice.startswith("N"):
+                new_name = input("Enter the new name: ")
+                cursorForUserBook.execute("Update contact_book_users SET Name = (?) WHERE rowid = (?)",(new_name,person_id))
+                connection_with_user_database.commit()
+                connection_with_user_database.close()
+            elif update_choice.startswith("a") or update_choice.startswith("A"):
+                new_address = input("Enter the new address: ")
+                cursorForUserBook.execute("Update contact_book_users SET Address = (?) WHERE rowid = (?)",(new_address,person_id))
+                connection_with_user_database.commit()
+                connection_with_user_database.close()
+            elif update_choice.startswith("p") or update_choice.startswith("P"):
+                new_phone_number = input("Enter the new phone number: ")
+                cursorForUserBook.execute("Update contact_book_users SET Phone Number = (?) WHERE rowid = (?)",(new_phone_number,person_id))
+                connection_with_user_database.commit()
+                connection_with_user_database.close()
+            elif update_choice.startswith("e") or update_choice.startswith("E"):
+                new_email = input("Enter the new email: ")
+                cursorForUserBook.execute("Update contact_book_users SET Email = (?) WHERE rowid = (?)",(new_email,person_id))
+                connection_with_user_database.commit()
+                connection_with_user_database.close()
     elif check_log_on == 0:
         print("You have to login in order to update the contacts. Please do so! ")
 def view_contact(check_log_on):
@@ -276,7 +280,7 @@ menu_choice = 0 # the menu choice the user chooses
 check_log_on = 0 # whether the user has logged on (1) or logged off (0)
 number_of_contacts = 0 # counts the number of contacts the user has
 dict1 = {} # stores the username and password
-while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice != 4 and menu_choice != 5 and menu_choice != 6 and menu_choice != 7:
+while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice != 4 and menu_choice != 5 and menu_choice != 6 and menu_choice != 7 and menu_choice !=8:
     print("Welcome. Pick an option from the menu: ")
     print("1.Register an account: ")
     print("2.Log into your account: ")
@@ -285,10 +289,11 @@ while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice
     print("5.Update a contact: ")
     print("6.View a contact: ")
     print("7.Log off: ")
+    print("8.Exit the program: ")
     try: # allow user to enter a menu choice
         menu_choice = int(input("Enter your choice: "))
-    except ValueError: # expect an error (user does not enter number from 1-6)
-        print("You need to choose an option from 1-6: ")
+    except ValueError: # expect an error (user does not enter number from 1-8)
+        print("You need to choose an option from 1-8: ")
     else: # otherwise
         if menu_choice == 1: # if the menu choice is 1
             if check_log_on == 0: # if the user is not logged on
@@ -322,3 +327,5 @@ while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice
             check_log_on = log_off_system(check_log_on) # call the log off function which will return the variable on the left of the
                                                         # equals sign
             menu_choice = 0 # back to menu
+        elif menu_choice == 8: # option to exit out of the program
+            print("Thanks for using the app! Bye: ") # thank you message printed to screen
