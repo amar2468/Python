@@ -43,5 +43,5 @@ Finally, option 5 performs checkout by calling the method perform_checkout which
 
 The user manual for this system is as follows. When the customer chooses option 1, they type in their name, surname, country, mobile number, currency of choice and the type of customer they are. The customer is created. Then, option 2 shows the dictionary of products depending on what customer they are. Then, option 3 allows the customer to add or remove products from their shopping cart. Option 4 shows them their shopping cart with added/removed items. Option 5 shows the total price along with the currency and asks the user whether they want to continue shopping or not. If the user does not want to continue, a message is printed to screen and they exit out of the shop. Otherwise, they are returned back to the main menu. 
 
-If you wish to run this program, it is very easy. First, install an IDE and the compiler for Python. Then, use the source code from ShoppingOnline.py. Once you run the program,follow the steps given in the user manual.
+If you wish to run this program, it is very simple. First, install an IDE and the compiler for Python. Then, use the source code from ShoppingOnline.py. Once you run the program,follow the steps given in the user manual.
 
