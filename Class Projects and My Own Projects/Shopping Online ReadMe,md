@@ -3,6 +3,7 @@
 This document contains information on the project that I completed, which is called ShoppingOnline.py
 
 A class called ShoppingCart which is based on the shopping cart in which the customer can see their shopping cart and they can add products or remove them from their shopping cart and they can perform a checkout where the total will be presented and necessary error-checking is done. 
+
 In the __init__ method, the arguments that were received are used to initialise the variables. The specific dictionary of products available and the user shopping cart were the arguments given.
 
 In the adding_products method, the keys from the dictionary of products available are put inside a list so that when the customer looks for a specific item number, it will look for the index and find the key needed e.g. if the user chooses item number 1, it will know that the first element in the list is 1. The reason why the item number is subtracted by 1 is because elements start from 0 and if the customer enters 1, I want the program to then take the element from 0 as 1. That way, the first element will be item number 1 and so on. Then, similar was done for values as was for keys. The .values() was used in order to show only the values and then this was put inside a list so that it can be accessed via the item number chosen by the customer. Finally, the key:value needed was put inside the customer’s shopping cart.  
