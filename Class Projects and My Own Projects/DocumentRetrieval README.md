@@ -18,6 +18,7 @@ Option 3 is if the user wishes to exit the program. A thank you message is print
   
 
 The project is details is as follows:
+
 FUNCTION DIVIDE_INTO_DOCUMENTS
 
 For my program, I first opened the file and made the mode “r” which means read. Then, I declared an empty list which would store the documents inside it. I then called the function and passed the file into it so that I can divide the file into documents. Inside the function, I created an empty string (current_document) and a string that contained the start of the token (new_token). I iterated over the file using i. I joined the string to the value in i using concatenation and I stripped the punctuation using "import string" and i used the string.punctuation function so that it does not contain weird characters. After this, I created an else that would execute the code if new_token symbol was in i. If the current_document was empty, it would just continue on and ignore it. Otherwise, the current_document would be appended to the list1.
