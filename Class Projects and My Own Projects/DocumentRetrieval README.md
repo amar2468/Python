@@ -10,6 +10,7 @@ The program has three options:
                                 1. Search for Documents
                                 2. Read Documents
                                 3. Quit Program
+                               
 The first option asks the user to enter two words that they wish to look for. The program then identifies where these words are located i.e. which documents.
 Sets are used for these two words and then an intersection set is used to find the common documents between the two words.
 Option 2 asks the user which document they wish to see. The user enters the document and it is presented to the user to see.
