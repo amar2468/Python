@@ -15,6 +15,8 @@ The first option asks the user to enter two words that they wish to look for. Th
 Sets are used for these two words and then an intersection set is used to find the common documents between the two words.
 Option 2 asks the user which document they wish to see. The user enters the document and it is presented to the user to see.
 Option 3 is if the user wishes to exit the program. A thank you message is printed and the program ends.
+
+Note: If you wish to run this program, use must have a python IDE and compiler. Also, there is a file in this directory called ap_docs.txt. This is needed in this program because the program reads this file. When you want to run this program, ensure that the file is put inside the directory of where the python projects are.
   
 
 The project is details is as follows:
