@@ -1,3 +1,4 @@
 *********************************************************Calculator************************************************************
 
-This file contains information on the project that I completed which is called Calculator.py. I used the Tkinter Library in Python to complete this project
+
+Note: I am still working on this project so the documentation is still not available
