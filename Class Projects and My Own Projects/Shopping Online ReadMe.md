@@ -22,12 +22,12 @@ The __str__ methods prints the customer personal details.
 There are three subclasses that inherit attributes from CustomerClass. They are: LoyalCustomers, BargainHunters and NeedBased. All of these subclasses are similar to each other.
 The LoyalCustomers consists of an __init__ method that initialises the variables and inherits the attributes from CustomerClass. This means that inheritance is the relationship between the subclass and the CustomerClass. 
 
-The currency_conversions method receives arguments such as loyal customer dictionary of products and the currency. If the customer chooses euro, the euro will be printed when the customer performs a checkout. If they choose dollars, there is a for loop that iterates over the key,value of the loyal customer dict of products and multiplies the price by the exchange rate. This creates a new price that will be displayed if user enters option 2. 
+The currency_conversions method receives arguments such as loyal customer dictionary of products and the currency. If the customer chooses euro, the euro will be printed when the customer performs a checkout. If they choose dollars, there is a for loop that iterates over the key,value of the loyal customer dict of products and multiplies the price by the exchange rate. This creates a new price that will be displayed if user enters option 2. The exchange rate is extracted from the url of an API that I used in this program. This way, I am not hard-coding the exchange rate and it can change from time to time.
 
 Finally, the __str__ method prints what type of customer you are, which in this case is a loyal customer. 
 
 The same process was done with BargainHunters. The __init__ initialises the variables and then inherits attributes from CustomerClass.
-The bargain_hunter_currency_options method converts the prices to dollars or keeps them as euros. If the customer chooses euros, the euro will be used. If they pick dollars, there is a for loop that iterates over the key,value of the bargain hunter dict of products and multiplies the price by the exchange rate. This creates a new price that will be displayed if user enters option 2. 
+The bargain_hunter_currency_options method converts the prices to dollars or keeps them as euros. If the customer chooses euros, the euro will be used. If they pick dollars, there is a for loop that iterates over the key,value of the bargain hunter dict of products and multiplies the price by the exchange rate using the API value of the exchange rate. This creates a new price that will be displayed if user enters option 2. 
 
 At the end, the __str__ method returns the customer type which is a bargain hunter.
 NeedBased was done the same way as the other two subclasses. The __init__ method initialised the variables and attributes were inherited from CustomerClass. 
