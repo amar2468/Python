@@ -68,35 +68,65 @@ while counter == 1:
     if option_selected == 1:
         value_entered = int(input("Enter the value you wish to convert: "))
         currency_chosen = input("Enter the currency type from the following: \n"
-                        "1. USD\n"
-                        "2. EUR\n"
-                        "3. GBP\n"
-                        "4. AUD\n"
-                        "5. CAD\n")
+                        "1.USD\n"
+                        "2.EUR\n"
+                        "3.GBP\n"
+                        "4.AUD\n"
+                        "5.CAD\n")
         if currency_chosen == "USD":
             currency_chosen = "USD"
             value_and_curreny = Currency(value_entered, 'USD')
-            new_value_with_currency_returned = value_and_curreny.convert_to("EUR")
+            currency_to_convert_to = input("Which currency do you wish to convert to:\n" 
+                                    "1.USD \n"
+                                    "2.EUR\n"
+                                    "3.GBP\n"
+                                    "4.AUD\n"
+                                    "5.CAD\n")
+            new_value_with_currency_returned = value_and_curreny.convert_to(currency_to_convert_to)
             print(new_value_with_currency_returned)
         elif currency_chosen == "EUR":
             currency_chosen = "EUR"
             value_and_curreny = Currency(value_entered, 'EUR')
-            new_value_with_currency_returned = value_and_curreny.convert_to("USD")
+            currency_to_convert_to = input("Which currency do you wish to convert to:\n"
+                                "1.USD \n"
+                                "2.EUR\n"
+                                "3.GBP\n"
+                                "4.AUD\n"
+                                "5.CAD\n")
+            new_value_with_currency_returned = value_and_curreny.convert_to(currency_to_convert_to)
             print(new_value_with_currency_returned)
         elif currency_chosen == "GBP":
             currency_chosen = "GBP"
             value_and_curreny = Currency(value_entered, 'GBP')
-            new_value_with_currency_returned = value_and_curreny.convert_to("CAD")
+            currency_to_convert_to = input("Which currency do you wish to convert to:\n"
+                                "1.USD \n"
+                                "2.EUR\n"
+                                "3.GBP\n"
+                                "4.AUD\n"
+                                "5.CAD\n")
+            new_value_with_currency_returned = value_and_curreny.convert_to(currency_to_convert_to)
             print(new_value_with_currency_returned)
         elif currency_chosen == "AUD":
             currency_chosen = "AUD"
             value_and_curreny = Currency(value_entered, 'AUD')
-            new_value_with_currency_returned = value_and_curreny.convert_to("GBP")
+            currency_to_convert_to = input("Which currency do you wish to convert to:\n"
+                                "1.USD\n"
+                                "2.EUR\n"
+                                "3.GBP\n"
+                                "4.AUD\n"
+                                "5.CAD\n")
+            new_value_with_currency_returned = value_and_curreny.convert_to(currency_to_convert_to)
             print(new_value_with_currency_returned)
         elif currency_chosen == "CAD":
             currency_chosen = "CAD"
             value_and_curreny = Currency(value_entered, 'CAD')
-            new_value_with_currency_returned = value_and_curreny.convert_to("AUD")
+            currency_to_convert_to = input("Which currency do you wish to convert to:\n"
+                                "1.USD\n"
+                                "2.EUR\n"
+                                "3.GBP\n"
+                                "4.AUD\n"
+                                "5.CAD\n")
+            new_value_with_currency_returned = value_and_curreny.convert_to(currency_to_convert_to)
             print(new_value_with_currency_returned)
         
         else:
