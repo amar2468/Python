@@ -1,8 +1,11 @@
 # Create a program that manages an online shopping cart. The user can choose between being a loyal, bargain hunter or needs based customer.
 # The user can add items to the shopping cart and can see the list of products depending on what type of customer they are.
 # Author: Amar Plakalo
-# Date 17/12/2020 (Last Updated)
+# Date 17/12/2020 - Updated 17/03/2021
 # Used Visual Studio Code on Windows 10
+
+import urllib.request
+import json
 
 class ShoppingCart:
     """This class is a shopping cart that can have items added to it or removed from it and it can display the checkout"""
@@ -97,8 +100,22 @@ class LoyalCustomers(CustomerClass):
         if currency_picked.startswith('e') or currency_picked.startswith('E'): # if user chooses euro
             type_currency = 'EUR' # set currency to euro
         elif currency_picked.startswith('d') or currency_picked.startswith('D'): # if user chose dollars
+            url = "https://api.exchangeratesapi.io/latest?base="
+            url += "EUR"
+            url += "&symbols=" + "USD"
+            conv = urllib.request.urlopen(url)
+
+            response = conv.read().decode('UTF-8')
+            print(response)
+
+            dictionary1 = {}
+
+            dictionary1 = json.loads(response)
+
+            exchange_amount = dictionary1["rates"]["USD"]
+
             for key,value in loyal_customers_dict_of_product.items(): # iterate over key,value in loyal customer list of products
-                value = value * 1.21454 # multiply price by exchange rate
+                value = value * exchange_amount
                 value = round(value,2) # round to two decimal places
                 loyal_customers_dict_of_product[key] = value # put price into dictionary in place of the old price
             type_currency = 'DOLLARS' # sets currency to dollars
@@ -119,8 +136,23 @@ class BargainHunters(CustomerClass):
         if currency_picked.startswith('e') or currency_picked.startswith('E'): # if user chose euro
             type_currency = 'EUR' # set currency to euro
         elif currency_picked.startswith('d') or currency_picked.startswith('D'): # if user chose dollars
+            url = "https://api.exchangeratesapi.io/latest?base="
+            url += "EUR"
+            url += "&symbols=" + "USD"
+            conv = urllib.request.urlopen(url)
+
+            response = conv.read().decode('UTF-8')
+            print(response)
+
+            dictionary1 = {}
+
+            dictionary1 = json.loads(response)
+
+            exchange_amount = dictionary1["rates"]["USD"]
+
+
             for k,val in bargain_hunter_dict_of_products.items(): # iterate over key,value in list of products of bargain hunters
-                val = val * 1.21454 # multiply price by exchange rate
+                val = val * exchange_amount # multiply price by exchange rate
                 val = round(val,2) # round to 2 decimal places
                 bargain_hunter_dict_of_products[k] = val # put new value into dictionary in place of the old one
             type_currency = 'DOLLARS' # sets currency to dollars
@@ -143,8 +175,24 @@ class NeedBased(CustomerClass):
         if currency_picked.startswith('e') or currency_picked.startswith('E'): # if euro is picked, execute this
             type_currency = 'EUR' # set currency to euro
         elif currency_picked.startswith('d') or currency_picked.startswith('D'): # if user chooses dollars
+
+            url = "https://api.exchangeratesapi.io/latest?base="
+            url += "EUR"
+            url += "&symbols=" + "USD"
+            conv = urllib.request.urlopen(url)
+
+            response = conv.read().decode('UTF-8')
+            print(response)
+
+            dictionary1 = {}
+
+            dictionary1 = json.loads(response)
+
+            exchange_amount = dictionary1["rates"]["USD"]
+
+
             for k,val in need_based_customers_dict_of_products.items(): # iterate over key,value in list of products from need based customers
-                val = val * 1.21454 # multiply the price of the product by the exchange rate
+                val = val * exchange_amount # multiply the price of the product by the exchange rate
                 val = round(val,2) # round it to two decimal places
                 need_based_customers_dict_of_products[k] = val # put that value into the dictionary
             type_currency = 'DOLLARS' # if the user chose dollars, the currency type is set to dollars
