@@ -1,6 +1,6 @@
 # **********************************Contact Book***************************************
 # Author: Amar Plakalo
-# Date: 26 Feb 2021
+# Date: 27 Feb 2021 Updated 21/03/2021
 # This contact book allows user to add their contacts. They first have to create their account so that the contacts are private to them
 # and so no one else can see. This will allow multiple users to create accounts on this app and they can add and remove contacts as they
 # wish. They can also view their contacts and have access to information they need such as the phone number of the person. 
@@ -24,6 +24,8 @@ def registration_system(dict1):
     username and password are added into the text file and values are returned. Otherwise, the user is sent 
     back to register again.
     """
+    returned_value = 0 # allows verification to take place
+
     user_name = input("Enter your name so that you can register to use the Contact Book app: ") # enter the username
     user_phone_number = input("Enter your phone number: ") # enter the phone number
     user_password = input("Enter your password: ") # enter the password
@@ -43,9 +45,9 @@ def registration_system(dict1):
                 return user_name,user_phone_number,user_password # return the values
             
     else: # if everything went well
-        verification_process(user_password) # call the verification process
-        returned_value = 1 # allows verification to take place
-
+        returned_value = verification_process(user_password) # call the verification process
+        
+    
     if returned_value == 1: # if the value returned is 1
         print("Thanks for registering " + user_name + ". Now, log on: ") # thank you message
         dict1.clear() # clear the dictionary so that a new element can be inserted
@@ -91,29 +93,33 @@ def log_on_system(check_log_on):
                 else: # otherwise
                     print("Incorrectly entered username OR password OR both. Try again: ") # error message
                     check_log_on = 0 # user login set at 0 i.e. not logged in 
-                    return check_log_on # return the value
+                    user_name = ""
+                    return check_log_on,user_name # return the value
         else:
             print("User account that you entered does not exist on our system. Try again: ") # error message
             check_log_on = 0 # user not logged in
-            return check_log_on # return value
+            user_name = ""
+            return check_log_on,user_name # return value
                 
     elif check_log_on == 1: # if user already logged in
         print("You already logged in: ") # error message
         proof_of_log_on = 1 # set value of login to 1
-        return proof_of_log_on # return that value
+        user_name = ""
+        return proof_of_log_on,user_name # return that value
 
 # 3. Verify that this is you (Part of the registration process - in order to create your account to use the contact book)
 def verification_process(passwd_user):
     """
     The verification_process() function checks whether the user is really the owner of the phone number.
     If they correctly input the verification code, they register successfully.
-    Otherwise, there registration process fails.
+    Otherwise, their registration process fails.
     """
     code_received = random.randint(10000,99999) # random 5 digit number for the access code
     print("Your access code is " + str(code_received) + ".Enter this number and then enter your password to gain access: ")
 
     user_enter_code_received = input() # User enters code they received
-
+    
+    
     if int(user_enter_code_received) == code_received: # if the code that the user enters is equal to the code sent
         print("Well done. Correct code. Now enter your password: ") # code correct, now enter password
         verify_pass = input() # enters password
@@ -185,13 +191,19 @@ def remove_contact(check_log_on):
         cursorForUserBook = connection_with_user_database.cursor() # create a cursor so that you can delete the entry
         if check_log_on == 1: # if the user is logged in
             user_id = input("Enter the id of the user you wish to delete: ") # ask which id they want to delete
-
             cursorForUserBook.execute("DELETE FROM contact_book_users WHERE rowid = (?)",(user_id,)) # deletes the id from the database
             connection_with_user_database.commit() # save the changes
             connection_with_user_database.close() # close the database
         elif check_log_on == 0: # if not logged in
             print("You are not logged on - so you cannot check remove the contact: ") # error message
 def update_contact(check_log_on):
+    """
+    The update_contact() function allows the user to update the contact that they have already added to the list. The function first
+    checks whether the user has logged in. If they have, it connects with the user's database. Then, the file size is measured.
+    If the file is completely empty, then the user cannot update the contacts. Otherwise, they put the person id that they wish the change
+    and then, they choose which information they want to change. After picking an option, the UPDATE sqlite3 command is executed and the
+    information is changed. If the user did not log on, they will get an error message and they will be returned back to the main menu
+    """
     if check_log_on == 1:
         connection_with_user_database = sqlite3.connect('%s.db'% user_name)
         filesize = os.path.getsize("%s.db"% user_name) # measures the size of the file
@@ -281,6 +293,7 @@ check_log_on = 0 # whether the user has logged on (1) or logged off (0)
 number_of_contacts = 0 # counts the number of contacts the user has
 dict1 = {} # stores the username and password
 while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice != 4 and menu_choice != 5 and menu_choice != 6 and menu_choice != 7 and menu_choice !=8:
+    print("-----------------------------------")
     print("Welcome. Pick an option from the menu: ")
     print("1.Register an account: ")
     print("2.Log into your account: ")
@@ -290,6 +303,7 @@ while menu_choice != 1 and menu_choice != 2 and menu_choice != 3 and menu_choice
     print("6.View a contact: ")
     print("7.Log off: ")
     print("8.Exit the program: ")
+    print("-----------------------------------")
     try: # allow user to enter a menu choice
         menu_choice = int(input("Enter your choice: "))
     except ValueError: # expect an error (user does not enter number from 1-8)
