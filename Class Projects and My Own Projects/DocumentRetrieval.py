@@ -7,14 +7,10 @@
 import string
 
 import tkinter
-from tkinter import Tk,Button,Entry,Label,messagebox,Text,RIGHT,BOTH
+from tkinter import Tk,Button,Entry,Label,messagebox,Text
 from tkinter.constants import END
 
 
-root = Tk()
-root.title("Document Retrieval App")
-root.geometry("500x513")
-root.configure(bg="#42e3f5")
 
 def divide_into_documents(my_file): # This function takes the file as the parameter and divides the documents in the file into the list
 
@@ -78,6 +74,7 @@ def add_to_dictionary(list1): # Function that passes the list and this function 
 
     
 def find_word_in_document(dictionary1,wordsEntered): # function that passes three parameters which finds where the word is in the document
+    
     if wordsEntered == "":
         messagebox.showerror("Error: Text Not Entered","You haven't entered words. You must enter at least one word. Try again!")
     else:
@@ -116,9 +113,10 @@ def find_word_in_document(dictionary1,wordsEntered): # function that passes thre
         else: # otherwise
             textBox.insert(END,"\n" + "\nIntersection -> " + str(inter_set))
 def print_document(listPassed,documentChosen):
+
     if documentChosen == "" or documentChosen >= 'a' and documentChosen <= 'z' or documentChosen >= 'A' and documentChosen <= 'Z':
         messagebox.showerror("Error: No Number Entered","You haven't selected a document number. Try again!")
-    elif documentChosen > str(len(listPassed)):
+    elif int(documentChosen) > len(listPassed):
         messagebox.showerror("Error: Document Number Does Not Exist","Document number entered does not exist. Try again!")
     else:
         windowTwo = Tk()
@@ -133,17 +131,31 @@ def print_document(listPassed,documentChosen):
         documentChosen = documentChosen - 1
         printDocumentBox.insert("0.0",str(listPassed[documentChosen]))
 
+
+# Root window which display buttons, labels, etc.. This is the main GUI window
+
+root = Tk()
+root.title("Document Retrieval App")
+root.geometry("500x513")
+root.configure(bg="#42e3f5")
+
 # open the file and put it inside the variable
 
 my_file = open('ap_docs.txt','r')
+
 
 # empty list declared
 
 list1 = []
 
+
 # call the function that divides the file into documents
 
 list1 = divide_into_documents(my_file)
+
+# Calls the function which adds the words to the dictionary from the list passed.
+
+dictionary1 = add_to_dictionary(list1)
 
 
 # Below is the GUI for this app. Labels, Entry boxes, Buttons and Frames were used in order to make this app functional
@@ -151,33 +163,27 @@ list1 = divide_into_documents(my_file)
 # The label shows the user the title of the app and it is inside the window.
 
 label = Label(root,text="Welcome to the Document Retrieval App! Enjoy yourself!!!",font=('Comic Sans MS', 13,'bold'),bg="#42e3f5").place(x=10,y=10)
-
+label_search_for_word = Label(root,text="Search For Words",font=('Comic Sans MS', 12,'bold'),bg="#42e3f5",fg="#006e24").place(x=100,y=70)
+label_find_document = Label(root,text="Find Document",font=('Comic Sans MS', 12,'bold'),bg="#42e3f5",fg="#006e24").place(x=100,y=210)
 # This is a textfield which allows the user to enter the words they wish to search for. The second command stores a placeholder
-# which tells the user what they have to do, which in this case is to enter words to search for.
+# which tells the user what they have to do, which in this case is to enter words to search for. The third command is a button
+# that searches for the words entered.
 
 TypeInWords = Entry(root,width = 23,font="Times")
 TypeInWords.insert(0,"Type words you wish to find")
-
-# Calls the function which adds the words to the dictionary from the list passed.
-dictionary1 = add_to_dictionary(list1)
-
-# When user clicks this button, the program will see whether the words exist in the dictionary and the documents which contain the words
-# will appear.
-
 SearchButtonToFindDocs = Button(root,text = "Search",padx=20,pady=10,bg = "#A9A9A9",font=('Comic Sans MS', 12),command=lambda:find_word_in_document(dictionary1,TypeInWords.get()))
+
 
 # Entry box which allows the user to input the document number they wish to preview. The second command is a placeholder that explains
 # to the user what they must enter in the textfield
-
-EnterDocumentNumber = Entry(root,width=20,font="Times")
-EnterDocumentNumber.insert(0,"Enter document number to search")
-
-
 # When the button below is clicked, the document number entered will be passed to the print_document() function as well as the list of 
 # documents. Then, the document number will be an index inside the list minus 1 because indexes start from 0 in python. So if the 
 # user enters document number = 2, that will be index = 1. 
 
+EnterDocumentNumber = Entry(root,width=20,font="Times")
+EnterDocumentNumber.insert(0,"Enter document number")
 ReadDocuments = Button(root,text = "Read Documents",padx=10,pady=10,bg = "#A9A9A9",font=('Comic Sans MS', 12),command=lambda:print_document(list1, EnterDocumentNumber.get()))
+
 
 # Quit program button allows the user to exit the app. It immediately closes the root window.
 
@@ -187,9 +193,9 @@ QuitProgram = Button(root,text="Quit Program",padx=10,pady=10,bg = "#A9A9A9",fon
 # Using layout type "place" which allows me to place exactly where I want a widget to appear using x,y coordinates.
 # The below is done for the search box to enter words to search and the button which searches for those words
 
-TypeInWords.place(x=100,y=50)
+TypeInWords.place(x=100,y=100)
 
-SearchButtonToFindDocs.place(x=100,y=80)
+SearchButtonToFindDocs.place(x=100,y=130)
 
 # Using layout type "place" which allows me to place exactly where I want a widget to appear using x,y coordinates.
 # The below is done for the document number search to enter the document number to search and the button which searches for the document
@@ -198,6 +204,9 @@ SearchButtonToFindDocs.place(x=100,y=80)
 EnterDocumentNumber.place(x=100,y=240)
 
 ReadDocuments.place(x=100,y=270)
+
+# Using layout type "place" which allows me to place exactly where I want a widget to appear using x,y coordinates.
+# The below is done for the quit program button which, when clicked, exits the app
 
 QuitProgram.place(x=369,y=455)
 
