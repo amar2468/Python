@@ -11,8 +11,8 @@ The program uses a GUI window to allow the user to either:
 2. Read a document using the document number
 3. Quit the program
                                
-The first option asks the user to enter two words that they wish to look for. The program then identifies where these words are located i.e. which documents.
-Sets are used for these two words and then an intersection set is used to find the common documents between the two words.
+The first option asks the user to enter words that they wish to look for. The program then identifies where these words are located i.e. which documents.
+Sets are used for these words and then an intersection set is used to find the common documents between the words.
 Option 2 asks the user which document they wish to see. The user enters the document and it is presented to the user to see.
 Option 3 is if the user wishes to exit the program.
 
@@ -31,7 +31,7 @@ Then, I called the dictionary function which would add words to the dictionary a
 
 FUNCTION FIND_WORD_IN_DOCUMENT
 
-The function takes in two parameters - dictionary of words and words that the user entered. The first thing that happens is that there is an error checking piece of code. If the user did not enter any text, the program tells the user that they didn't enter text. Otherwise, the new window is displayed and the text box widget is created. This will store the words that were searched for and what documents contain these words. I declared 2 empty sets and one intersection set that would hold the common documents between the words. I first iterated over all the keys in the dictionary. If the key was equal to the word, I put the document number in the set. Once that was complete, I looked for the intersection between the two sets. If there was no intersection, meaning that no documents were common between them, a message box was displayed to tell the user that there was no intersection. Otherwise, the intersection was shown.
+The function takes in two parameters - dictionary of words and words that the user entered. The first thing that happens is that there is an error checking piece of code. If the user did not enter any text, the program tells the user that they didn't enter text. Otherwise, the new window is displayed and the text box widget is created. This will store the words that were searched for and what documents contain these words. I declared a list that will store the sets and one intersection set that would hold the common documents between the words. I first iterated over all the keys in the dictionary. If the key was equal to the word, I put the document number in the set. Once that was complete, I looked for the intersection between the sets. If there was no intersection, meaning that no documents were common between them, a message box was displayed to tell the user that there was no intersection. Otherwise, the intersection was shown.
 
 FUNCTION PRINT_DOCUMENT
 
