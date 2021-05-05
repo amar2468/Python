@@ -90,10 +90,7 @@ def find_word_in_document(dictionary1,wordsEntered): # function that passes thre
 
         list_storing_sets = []
 
-        #a_set = set() # declare one empty set
-        #b_set = set() # declare another empty set
         inter_set = set() # this will hold the intersection of the two sets
-        random_set = set()
 
         for i in range(0,len(wordsEntered)):
             for k in dictionary1.keys(): # iterates over each key in the dictionary
