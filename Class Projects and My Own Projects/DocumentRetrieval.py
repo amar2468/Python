@@ -2,7 +2,7 @@
 # appear in. The user can then see the document and read it if they want. Once they are done, they can repeat the process or they can end the 
 # program using the quit button
 # Author: Amar Plakalo
-# Date: 03/05/2021 (Last Updated)
+# Date: 05/05/2021 (Last Updated)
 # Used Visual Studio Code on Windows 10
 import string
 
@@ -88,30 +88,32 @@ def find_word_in_document(dictionary1,wordsEntered): # function that passes thre
 
         wordsEntered = wordsEntered.split()
 
-        a_set = set() # declare one empty set
-        b_set = set() # declare another empty set
+        list_storing_sets = []
+
+        #a_set = set() # declare one empty set
+        #b_set = set() # declare another empty set
         inter_set = set() # this will hold the intersection of the two sets
+        random_set = set()
 
-        for k in dictionary1.keys(): # iterates over each key in the dictionary
-            if k == wordsEntered[0].lower(): # if the key in the dictionary is equal to the word entered by the user
-                if wordsEntered[0] == k:
-                    a_set = set(dictionary1[k]) # put the document number in the set
-                    textBox.insert("0.0","\n" + k + " -> " + str(a_set) + "\n")
-                elif wordsEntered[0] != k:
-                    a_set = set(dictionary1[k])
-                    textBox.insert("0.0","\n" + k + " -> " + str(a_set)+ "\n")
-            
-            elif k == wordsEntered[1].lower(): # if the key in the dictionary is equal to the second word entered by the user
-                b_set = set(dictionary1[k]) # put document number in the set
-                textBox.insert("2.0","\n" + k + " -> " + str(b_set)+ "\n")
-            else:
-                continue
-        inter_set = a_set & b_set # find intersection between the documents i.e. the common documents
+        for i in range(0,len(wordsEntered)):
+            for k in dictionary1.keys(): # iterates over each key in the dictionary
+                if k == wordsEntered[i].lower(): # if the key in the dictionary is equal to the word entered by the user
+                    list_storing_sets.insert(i,set(dictionary1[k]))
+                    textBox.insert("0.0","\n" + k + " -> " + str(list_storing_sets[i]) + "\n")
+                else:
+                    continue
+        if len(list_storing_sets) <= 1:
+            if inter_set == set(): # if there is no intersection
+                messagebox.showinfo("No intersection between words","There are no documents that are common between these words!")
+            else: # otherwise
+                textBox.insert(END,"\n" + "\nIntersection -> " + str(inter_set))
+        else:
+            inter_set = set.intersection(*list_storing_sets)
 
-        if inter_set == set(): # if there is no intersection
-            messagebox.showinfo("No intersection between words","There are no documents that are common between these words!")
-        else: # otherwise
-            textBox.insert(END,"\n" + "\nIntersection -> " + str(inter_set))
+            if inter_set == set(): # if there is no intersection
+                messagebox.showinfo("No intersection between words","There are no documents that are common between these words!")
+            else: # otherwise
+                textBox.insert(END,"\n" + "\nIntersection -> " + str(inter_set))
 def print_document(listPassed,documentChosen):
 
     if documentChosen == "" or documentChosen >= 'a' and documentChosen <= 'z' or documentChosen >= 'A' and documentChosen <= 'Z':
